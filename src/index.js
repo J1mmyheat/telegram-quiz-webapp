@@ -1,7 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import QuizApp from "./quiz";
-import "./style.css";
+import Quiz from "./quiz"; // Импорт твоего компонента
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<QuizApp />);
+root.render(
+  <React.StrictMode>
+    <Quiz />
+  </React.StrictMode>
+);
