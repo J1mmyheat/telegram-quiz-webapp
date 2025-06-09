@@ -1,71 +1,82 @@
-import { useState } from "react";
+
+import React, { useState } from "react";
 
 const questions = [
   {
-    q: "Столица Франции?",
+    question: "Столица Франции?",
     options: ["Париж", "Рим", "Берлин", "Мадрид"],
-    answer: 0,
+    correct: 0,
   },
   {
-    q: "Самый популярный язык программирования?",
+    question: "Самый популярный язык программирования?",
     options: ["Python", "Java", "C++", "Ruby"],
-    answer: 0,
+    correct: 0,
   },
   {
-    q: "Год запуска первого спутника?",
+    question: "Год запуска первого спутника?",
     options: ["1957", "1969", "1945", "1980"],
-    answer: 0,
+    correct: 0,
+  },
+  {
+    question: "Символ кислорода в химии?",
+    options: ["O", "K", "C", "H"],
+    correct: 0,
+  },
+  {
+    question: "Сколько будет 3 x 4?",
+    options: ["7", "12", "9", "14"],
+    correct: 1,
   },
 ];
 
-export default function QuizApp() {
+const Quiz = () => {
   const [step, setStep] = useState(0);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get("user_id");
+
   const handleAnswer = (index) => {
-    if (index === questions[step].answer) setScore(score + 1);
-    if (step + 1 < questions.length) setStep(step + 1);
-    else setFinished(true);
+    if (index === questions[step].correct) {
+      setScore(score + 1);
+    }
+    if (step + 1 < questions.length) {
+      setStep(step + 1);
+    } else {
+      setFinished(true);
+      sendResult(score + (index === questions[step].correct ? 1 : 0));
+    }
   };
 
+  const sendResult = async (finalScore) => {
+    await fetch("http://localhost:8080/result", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, score: finalScore }),
+    });
+  };
+
+  if (finished) {
+    return (
+      <div className="quiz">
+        <h2>Квиз завершён!</h2>
+        <p>Вы набрали {score} из {questions.length}.</p>
+        <p>Результат будет отправлен боту.</p>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ padding: 20, fontFamily: "sans-serif" }}>
-      {!finished ? (
-        <>
-          <h2>Вопрос {step + 1} из {questions.length}</h2>
-          <p>{questions[step].q}</p>
-          {questions[step].options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => handleAnswer(i)}
-              style={{
-                display: "block",
-                margin: "10px 0",
-                padding: "10px 15px",
-                fontSize: "16px",
-              }}
-            >
-              {opt}
-            </button>
-          ))}
-          <p>Текущий счёт: {score}</p>
-        </>
-      ) : (
-        <>
-          <h2>✅ Квиз завершён!</h2>
-          <p>Ты набрал {score} из {questions.length}</p>
-          <h3>🏆 Топ игроков:</h3>
-          <ul>
-            <li>@sasha — 5 баллов</li>
-            <li>@lena — 4 балла</li>
-            <li>@mike — 3 балла</li>
-          </ul>
-          <button onClick={() => { setStep(0); setScore(0); setFinished(false); }}>
-            Пройти ещё раз
-          </button>
-        </>
-      )}
+    <div className="quiz">
+      <h2>{questions[step].question}</h2>
+      {questions[step].options.map((option, index) => (
+        <button key={index} onClick={() => handleAnswer(index)}>
+          {option}
+        </button>
+      ))}
     </div>
   );
-}
+};
+
+export default Quiz;
