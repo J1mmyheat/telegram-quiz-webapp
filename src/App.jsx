@@ -1,45 +1,39 @@
-import React, { useState } from "react";
-import { QUESTIONS } from "./questions";
+import React, { useEffect, useState } from "react";
 
 function App() {
-  const [step, setStep] = useState(-1);
-  const [score, setScore] = useState(0);
+  const [quiz, setQuiz] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleStart = () => setStep(0);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const quizId = params.get("quiz_id") || "general_knowledge";
 
-  const handleAnswer = (index) => {
-    if (index === QUESTIONS[step].answer) setScore(score + 1);
-    setStep(step + 1);
-  };
+    fetch(`/quizzes/${quizId}.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Квиз не найден");
+        return res.json();
+      })
+      .then((data) => setQuiz(data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
 
-  if (step === -1) {
-    return <div className="quiz-box"><button onClick={handleStart}>Начать квиз</button></div>;
-  }
+  if (loading) return <p>Загрузка...</p>;
+  if (!quiz) return <p>Квиз не найден.</p>;
 
-  if (step >= QUESTIONS.length) {
-    return (
-      <div className="quiz-box">
-        <h2>✅ Квиз завершён!</h2>
-        <p>Ты набрал {score} из {QUESTIONS.length}.</p>
-        <h3>🏆 Топ игроков (заглушка)</h3>
-        <ul>
-          <li>1. Alex — 5 очков</li>
-          <li>2. Maria — 4 очка</li>
-          <li>3. You — {score} очков</li>
-        </ul>
-      </div>
-    );
-  }
-
-  const q = QUESTIONS[step];
   return (
-    <div className="quiz-box">
-      <h2>{q.q}</h2>
-      <div className="options">
-        {q.options.map((opt, i) => (
-          <button key={i} onClick={() => handleAnswer(i)}>{opt}</button>
-        ))}
-      </div>
+    <div>
+      <h1>{quiz.title}</h1>
+      {quiz.questions.map((q, index) => (
+        <div key={index}>
+          <p>{q.question}</p>
+          <ul>
+            {q.answers.map((answer, i) => (
+              <li key={i}>{answer}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }

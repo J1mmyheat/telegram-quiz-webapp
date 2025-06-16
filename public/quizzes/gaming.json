@@ -1,0 +1,26 @@
+{
+  "id": "gaming",
+  "title": "Гейминг",
+  "questions": [
+    {
+      "question": "Как называется главный персонаж в серии игр Halo?",
+      "answers": [
+        "Doomguy",
+        "Master Chief",
+        "Commander Shepard",
+        "Gordon Freeman"
+      ],
+      "correct_index": 1
+    },
+    {
+      "question": "Какая студия разработала игру The Witcher 3?",
+      "answers": [
+        "Ubisoft",
+        "CD Projekt RED",
+        "Bethesda",
+        "Rockstar"
+      ],
+      "correct_index": 1
+    }
+  ]
+}
