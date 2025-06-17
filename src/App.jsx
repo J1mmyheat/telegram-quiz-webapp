@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./style.css";
 
 function App() {
   const [questions, setQuestions] = useState([]);
@@ -8,50 +9,36 @@ function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const quizId = params.get("quiz_id") || "general_knowledge";
-
+    const quizId = params.get("quiz_id") || "general";
     fetch(`/quizzes/${quizId}.json`)
       .then((res) => res.json())
       .then((data) => setQuestions(data.questions))
-      .catch((err) => {
-        console.error("Ошибка загрузки квиза:", err);
-        setQuestions([]); // безопасная заглушка
-      });
+      .catch((err) => console.error("Ошибка загрузки квиза:", err));
   }, []);
 
   const handleAnswer = (isCorrect) => {
-    if (isCorrect) {
-      setScore((prev) => prev + 1);
-    }
+    if (isCorrect) setScore(score + 1);
     const next = current + 1;
-    if (next < questions.length) {
-      setCurrent(next);
-    } else {
-      setFinished(true);
-    }
+    if (next < questions.length) setCurrent(next);
+    else setFinished(true);
   };
 
-  if (!questions.length) return <div>Загрузка...</div>;
-
-  if (finished) {
-    return (
-      <div className="results">
-        <h2>Квиз завершён</h2>
-        <p>Вы набрали {score} из {questions.length} баллов!</p>
-      </div>
-    );
-  }
-
-  const q = questions[current];
+  if (questions.length === 0) return <div className="App">Загрузка...</div>;
 
   return (
-    <div className="quiz">
-      <h2>{q.q}</h2>
-      {q.options.map((option, idx) => (
-        <button key={idx} onClick={() => handleAnswer(option.correct)}>
-          {option.text}
-        </button>
-      ))}
+    <div className="App">
+      {!finished ? (
+        <div>
+          <h2>{questions[current].question}</h2>
+          {questions[current].options.map((opt, idx) => (
+            <button key={idx} onClick={() => handleAnswer(opt.correct)}>
+              {opt.text}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <h2>Вы набрали {score} из {questions.length}</h2>
+      )}
     </div>
   );
 }
