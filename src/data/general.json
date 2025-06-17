@@ -1,0 +1,17 @@
+{
+  "questions": [
+    {
+      "question": "Какого хрена?",
+      "options": [
+        {
+          "text": "такого",
+          "correct": false
+        },
+        {
+          "text": "не такого",
+          "correct": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.945f1256.css","mappings":"AAAA,KAAsB,sBAAuB,CAAtC,YAAwC,CAAE,OAAS,aAAc,CAAE,eAAkB","sources":["style.css"],"sourcesContent":[".App { padding: 20px; font-family: sans-serif; } button { display: block; margin-top: 10px; }"],"names":[],"sourceRoot":""}

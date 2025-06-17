@@ -1,0 +1,17 @@
+{
+  "questions": [
+    {
+      "question": "Кто написал 'Войну и мир'?",
+      "options": [
+        {
+          "text": "Пушкин",
+          "correct": false
+        },
+        {
+          "text": "Толстой",
+          "correct": true
+        }
+      ]
+    }
+  ]
+}
