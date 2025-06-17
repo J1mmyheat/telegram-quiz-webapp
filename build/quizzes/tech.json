@@ -1,0 +1,26 @@
+{
+  "id": "tech",
+  "title": "Технологии",
+  "questions": [
+    {
+      "question": "Как называется язык программирования, созданный Гвидо ван Россумом?",
+      "answers": [
+        "Java",
+        "C++",
+        "Python",
+        "Go"
+      ],
+      "correct_index": 2
+    },
+    {
+      "question": "Компания-основатель операционной системы Android?",
+      "answers": [
+        "Google",
+        "Apple",
+        "Microsoft",
+        "Samsung"
+      ],
+      "correct_index": 0
+    }
+  ]
+}
